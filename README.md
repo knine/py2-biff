@@ -27,6 +27,7 @@ conda install -c astroconda -n iraf27 statistics termcolor
 
 * [Miniconda](https://docs.conda.io/en/latest/miniconda.html)
 * [AstroConda](https://astroconda.readthedocs.io/en/latest/getting_started.html)
+* [Tiny Tim](https://github.com/spacetelescope/tinytim)
 
 ### Installing
 
