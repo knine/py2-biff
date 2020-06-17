@@ -3,12 +3,12 @@
 import os
 import sys
 import time
-from termcolor import colored
 import yaml
 
+from functools import partial
+from termcolor import colored
+
 from biff.tinytim import Resample,TinyTim
-from psf import PSF
-#from psf import PSFTools
 
 class core:
     def __init__(self):
@@ -25,88 +25,28 @@ class core:
             os.system('clear')
             self.PrintMenu()
 
-            Run = { '1' : self.ReductionAll,
-                    '2' : self.ReductionSingle,
-                    '3' : self.ReductionBinary,
-                    '4' : self.FocusTestsAll,
-                    '5' : self.FocusTestsSingle,
-                    '6' : self.FocusTestsBinary,
-                    '10' : self.Tiny1,
+            Run = { '10' : self.Tiny1,
                     '11' : self.Tiny2,
-                    '12' : self.ResamplePSFAll,
-                    '13' : self.ResamplePrimary,
-                    '14' : self.ResampleSecondary,
-                    '20' : self.MakeConfigFiles,
-                    '21' : self.FindBackground,
-                    '22' : self.BestSingle,
-                    '23' : self.BestBinary,
-                    'q'  : self.Exit,
-                    '99' : self.AAA }
+                    '12' : partial(self.Resample,primary='true',secondary='true'),
+                    '13' : partial(self.Resample,primary='true'),
+                    '14' : partial(self.Resample,secondary='true'),
+                    'q'  : self.Exit }
 
             Option = raw_input(colored("Selection:  ","green"))
             Run.get(Option,self.PrintError)()
 
-    def AAA(self):
-        self.StartTime()
-
-        Focus = PSFTools.FocusTestAAA(Min=-20,Max=21)                   # Create New Focus Object
-        Focus.Setup(binary="true")                                      # Run the Binary Focus Tests
-
-        self.EndTime()
-
-    def BestBinary(self):
-        self.StartTime()
-        Run = PSF.BinaryFit()
-        Run.Run()
-        self.EndTime()
-
-    def BestSingle(self):
-        self.StartTime()
-        Run = PSF.SingleFit()
-        self.EndTime()
-
     def EndTime(self):
         self.endtime = time.strftime('%A, %B %d, %Y %X %Z' ,time.localtime())
-        print "\nStarted at:\t %s" % (self.starttime)
-        print "Finished at:\t %s \n" % (self.endtime)
+        print(colored("\nStarted at:\t %s","green")) % (self.starttime)
+        print(colored("Finished at:\t %s \n","green")) % (self.endtime)
         GoOn = raw_input("Press Enter To Continue...")
 
     def Exit(self):
         sys.exit(colored("\nThank You for Using BIFF\n","green"))
 
-    def FindBackground(self):
-        self.StartTime()
-        Run = PSFTools.ConfigFiles()
-        print Run.FindBackground()
-        self.EndTime()
-
-    def FocusTestsAll(self):
-        self.StartTime()
-        Focus = PSFTools.FocusTest(Min=-5,Max=6)                    # Create New Focus Object
-        Focus.Setup(single="true",binary="true")                    # Run The Single And Binary Focus Tests
-        self.EndTime()
-
-    def FocusTestsBinary(self):
-        self.StartTime()
-        Focus = PSFTools.FocusTest(Min=-5,Max=6)                    # Create New Focus Object
-        Focus.Setup(binary="true")                                  # Run the Binary Focus Tests
-        self.EndTime()
-    
-    def FocusTestsSingle(self):
-        self.StartTime()
-        Focus = PSFTools.FocusTest(Min=-20,Max=21)                  # Create New Focus Object
-        Focus.Setup(single="true")                                  # Run The Single Focus Tests
-        self.EndTime()
-
-    def MakeConfigFiles(self):
-        self.StartTime()
-        Files = PSFTools.ConfigFiles()                              # Create New Configuration Files Object
-        Files.Write()                                               # Automatically Generate The Files
-        self.EndTime()
-
     def PrintError(self):
-        print "\nSelected input is not an option!"
-        GoOn = raw_input("Press Enter To Continue...")
+        print(colored("\nSelected input is not an option!\n","red"))
+        GoOn = raw_input(colored("Press Enter To Continue...","green"))
 
     def PrintMenu(self):
         print colored("\n BIFF - BInary Fitting Facility ","green")
@@ -141,43 +81,10 @@ class core:
                 
         print colored("\nq - Quit the Program\n","green")
 
-    def ReductionAll(self):                                                             # Perform Single and Binary PSF Full Reduction
-        self.StartTime()
-        #Focus = float(raw_input("Focus Adjustment (0 For None):  "))                    # Get Focus Adjustment
-        #print Focus
-        print "\nFitAll:  This feature is not done yet"
-        self.EndTime()
-
-    def ReductionBinary(self):                                                          # Perform A Binary PSF Full Reduction
-        self.StartTime()
-        #Focus = float(raw_input("Focus Adjustment (0 For None):  "))                    # Get Focus Adjustment
-        #print Focus
-        print "\nFitBinary:  This feature is not done yet"
-        self.EndTime()
-
-    def ReductionSingle(self):                                                          # Perform A Single PSF Full Reduction
-        self.StartTime()
-        #Focus = float(raw_input("Focus Adjustment (0 For None):  "))                    # Get Focus Adjustment
-        #print Focus
-        print "FitSingle:  This feature is not done yet"
-        self.EndTime()
-
-    def ResampleAll(self):
-        self.StartTime()
-        Run = Resample()
-        Run.GoGoGo(primary='true',secondary='true')
-        self.EndTime()
-
-    def ResamplePrimary(self):
+    def Resample(self, **kwargs):
         self.StartTime()
         Run = Resample(self.biffParam)
-        Run.WritePSFs(primary='true')
-        self.EndTime()
-
-    def ResampleSecondary(self):
-        self.StartTime()
-        Run = Resample(self.biffParam)
-        Run.WritePSFs(secondary='true')
+        Run.WritePSFs(**kwargs)
         self.EndTime()
 
     def Tiny1(self):
