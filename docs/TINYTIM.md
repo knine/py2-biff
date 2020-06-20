@@ -1,4 +1,4 @@
-# BIFF - BInary Fitting Facility - TINYTIM Prerequisites
+# BIFF - BInary Fitting Facility - TINYTIM Install
 
 BIFF requires that [Tiny Tim](https://github.com/spacetelescope/tinytim) be available on the system.
 
@@ -30,19 +30,11 @@ cd tinytim
 make threadedlinux
 ```
 
-See the Tiny Tim documentation for more information.
+See the [Tiny Tim documentation](https://github.com/spacetelescope/tinytim/blob/master/tinytim.pdf) for more information.
 
 ## BIFF Configuration
 
-To make BIFF aware of Tiny Tim, edit biff.yaml. For example:
-```
-tinytim:
-  path: '/home/jake/stsci/tinytim'
-  outfile: 'nicmos1.par'
-```
-
-* path: Full directory path to Tiny Tim files. This will automatically set the required TINYTIM environment variable in BIFF when needed.
-* outfile: Name of the parameter file which tiny1 writes and tiny2 reads. Can be named as desired.
+To make BIFF aware of Tiny Tim, edit biff.yaml. For see [BIFF install](https://github.com/knine/py2-biff/docs/BIFF.md) document for details.
 
 ## Archive Copy
 
