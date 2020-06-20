@@ -31,8 +31,8 @@ conda install -c astroconda -n iraf27 statistics termcolor
 
 ### Installing
 
-* [Install Tiny Tim](https://github.com/knine/py2-biff/docs/TINYTIM.md)
-* [Install and Configure BIFF](https://github.com/knine/py2-biff/docs/BIFF.md)
+* [Install Tiny Tim](docs/TINYTIM.md)
+* [Install and Configure BIFF](docs/BIFF.md)
 
 ## Built With
 
